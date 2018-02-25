@@ -1,0 +1,9 @@
+branch,Kwai Fong,KF,Kwai Fong
+branch,Mong Kok,MK,mong kok
+confirm,yes,yes,ok,true,correct
+managerService,Loan,loan,borrow money,no money,borrow
+managerService,Insurance,insurance,travel insurance,life insurance,medical insurance,make a claim,claim insurance
+managerService,Stocks,stocks,buy stocks,stock,tradding,warrant,warrants,cbbcs
+ticketService,Deposit,deposit,put money in,money in,put money,save money
+ticketService,Withdraw,withdraw,get money,money out,get money out
+ticketService,Reset Password,reset password,forget password
