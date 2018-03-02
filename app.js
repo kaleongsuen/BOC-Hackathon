@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-'use strict';
+ 'use strict';
 
 var express = require('express'); // app server
 var bodyParser = require('body-parser'); // parser for post requests
@@ -26,6 +26,61 @@ var app = express();
 app.use(express.static('./public')); // load UI from public folder
 app.use(bodyParser.json());
 
+const mysql = require('mysql');
+const connection = mysql.createConnection({
+  host : 'localhost',
+  user : 'root',
+  password : 'akea0462',
+  database: 'queueDB'
+});
+
+connection.connect(function(error) {
+  if(error){
+    console.log('error' + error);
+  } else{
+    console.log('db success');
+  } 
+});
+
+app.post('/checkqueue.html', function(req, res){
+
+
+  //Select all customers and return the result object:
+  connection.query("SELECT * FROM members", function (err, result, fields) {
+    if (err) 
+      throw err;
+    else{
+      res.send('select success');
+    }
+    console.log(result);
+  });
+
+});
+
+app.post('/joinqueue.html', function(req, res) {
+
+  var jsondata = req.body;
+  var values = [];
+  console.dir(req.body);
+  for(var i=0; i< jsondata.length; i++)
+    values.push([jsondata[i].name,jsondata[i].age]);
+  
+//Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
+connection.query('INSERT INTO members (name, age) VALUES ?', [values], function(err,result) {
+  if(err) {
+   res.send('Error');
+ }
+ else {
+  res.send('Success');
+}
+});
+
+connection.query("SELECT * FROM members", function (err, result, fields) {
+    if (err) throw err;
+    console.log(result);
+  });
+
+});
 // Create the service wrapper
 var conversation = new Conversation({
   // If unspecified here, the CONVERSATION_USERNAME and CONVERSATION_PASSWORD env properties will be checked
@@ -33,7 +88,7 @@ var conversation = new Conversation({
   //'username': process.env.CONVERSATION_USERNAME,
   //'password': process.env.CONVERSATION_PASSWORD,
   'version_date': '2017-05-26'
-});
+}); 
 
 // Endpoint to be call from the client side
 app.post('/api/message', function(req, res) {
@@ -66,7 +121,7 @@ app.post('/api/message', function(req, res) {
  * @param  {Object} response The response from the Conversation service
  * @return {Object}          The response with the updated message
  */
-function updateMessage(input, response) {
+ function updateMessage(input, response) {
   var responseText = null;
   if (!response.output) {
     response.output = {};
