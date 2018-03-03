@@ -74,7 +74,10 @@ app.post('/joinqueue.html', function(req, res) {
   console.log('json: ')
   console.dir(jsondata);
   var currentPos;
-  connection.query('SELECT MAX(Qpos) position FROM queue  ', function(err, result, fields){
+  
+  var selsql = "SELECT MAX(Qpos) position FROM queue where service = \"" + jsondata[2].value + "\" AND branch = \"" + jsondata[3].value + "\"";
+  console.log(selsql);
+  connection.query(selsql, function(err, result, fields){
     if (err){
       throw err;
       console.log("select qpos error");
