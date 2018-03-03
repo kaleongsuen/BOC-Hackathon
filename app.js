@@ -44,15 +44,25 @@ connection.connect(function(error) {
 
 app.post('/checkqueue.html', function(req, res){
 
-
+  var jsondata = req.body;
+  var values = [];
+  console.log('json: ')
+  console.dir(jsondata);
+  var id = jsondata[0].value;
+  console.log("id: " + id);
   //Select all customers and return the result object:
-  connection.query("SELECT * FROM members", function (err, result, fields) {
+  var sql = "SELECT * FROM queue where customerId = \"" + id + "\"";
+  console.log("sql" + sql);
+  connection.query(sql, function (err, result, fields) {
     if (err) 
-      throw err;
+      throw err; 
     else{
-      res.send('select success');
+      //res.send('select success');
+       console.log(result);
+      res.send(result);
     }
-    console.log(result);
+   
+
   });
 
 });
@@ -61,24 +71,49 @@ app.post('/joinqueue.html', function(req, res) {
 
   var jsondata = req.body;
   var values = [];
-  console.dir(req.body);
-  for(var i=0; i< jsondata.length; i++)
-    values.push([jsondata[i].name,jsondata[i].age]);
-  
+  console.log('json: ')
+  console.dir(jsondata);
+  var currentPos;
+  connection.query('SELECT MAX(Qpos) position FROM queue  ', function(err, result, fields){
+    if (err){
+      throw err;
+      console.log("select qpos error");
+    }
+    currentPos = result[0].position;
+    //currentPos = currentPos.MAX(Qpos);
+    console.log("Qpos :");
+    console.log(result);
+    if (currentPos == null){
+      currentPos = 0;
+    } 
+    console.log("currentPos" + currentPos);
+
+
+        console.log("currentPos2: " + currentPos);
+    values.push([(currentPos + 1),jsondata[0].value,jsondata[1].value,jsondata[2].value,jsondata[3].value]);
+ // }
+  console.log('values:');
+  console.log(values);
 //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-connection.query('INSERT INTO members (name, age) VALUES ?', [values], function(err,result) {
+connection.query('INSERT INTO queue (Qpos, customerId, phone, service, branch) VALUES ?', [values], function(err,result) {
   if(err) {
+    console.log('fail');
    res.send('Error');
  }
  else {
+  console.log('suc');
   res.send('Success');
 }
 });
-
-connection.query("SELECT * FROM members", function (err, result, fields) {
-    if (err) throw err;
-    console.log(result);
   });
+ // for(var i=0; i< jsondata.length; i++){
+    //console.log(jsondata[i].value);
+
+
+// connection.query("SELECT * FROM queue", function (err, result, fields) {
+//     if (err) throw err;
+//     console.log(result);
+//   });
 
 });
 // Create the service wrapper
