@@ -1,0 +1,12 @@
+@charset "UTF-8";
+/* CSS Document */
+body{
+	background-color:whitesmoke;
+}
+.square{
+	border-top: 3px #d2296e solid;
+	width: 100%;
+	height: auto;
+	position: relative;
+	margin-bottom: 10px;
+}

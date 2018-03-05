@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+
+      	var map;
+      	var branchName = [];
+      	var branch = [];
+      	
+      	var branchInfo = "";
+      	readTextFile("branch.json");
+		console.log(branchInfo);
+		obj = JSON.parse(branchInfo);
+		
+		var len = obj.length;
+		for (i = 0; i < len; i++)
+		{
+			branchName.push(obj[i].name)
+			branch.push({
+				key: obj[i].name,
+				value: [obj[i].address_coordinates.latitude, obj[i].address_coordinates.longitude]
+			});
+		}
+
+      	function initMap()
+      	{
+      		map = new google.maps.Map(document.getElementById('map'),
+	        {
+	          center: {lat: 22.31552, lng: 114.16769},
+	          zoom: 13
+	        });
+	        var infoWindow = new google.maps.InfoWindow({map: map});
+
+	        // Try HTML5 geolocation.
+	        if (navigator.geolocation)
+	        {
+				navigator.geolocation.getCurrentPosition(function(position)
+				{
+					var pos =
+					{
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+					//window.alert(pos.lat);
+
+					//infoWindow.setPosition(pos);
+					//infoWindow.setContent('Your Current Locaiton');
+					marker = new google.maps.Marker(
+					{
+				        position: pos,
+				        map: map
+			      	});
+			      	marker.setIcon('blue-dot-30.png');
+					map.setCenter(pos);
+					smoothZoom(map, 17, map.getZoom());
+					showNearestBranch(pos.lat, pos.lng);
+					
+				}, function()
+				{
+					handleLocationError(true, infoWindow, map.getCenter());
+				});
+	        } else {
+	        	// Browser doesn't support Geolocation
+	        	handleLocationError(false, infoWindow, map.getCenter());
+	        }
+      	}
+
+      	function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+	        infoWindow.setPosition(pos);
+	        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      	}
+
+		// the smooth zoom function
+		function smoothZoom (map, max, cnt) 
+		{
+		    if (cnt >= max) {
+		        return;
+		    }
+		    else {
+		        z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+		            google.maps.event.removeListener(z);
+		            smoothZoom(map, max, cnt + 1);
+		        });
+		        setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+		    }
+		}
+
+		function showNearestBranch(lat, lng)
+		{
+			var len = branchName.length;
+
+			var min = 999;
+			var minPos;
+			var name = '';
+			var branchLat = 0;
+			var branchLng = 0;
+			var markerArray = [];
+			for (i = 0; i < len; i++)
+			{
+				var dist = distance(lat, lng, branch[i].value[0], branch[i].value[1]);
+				if (dist < min)
+				{
+					min = dist;
+					minPos = i;
+					name = branch[i].key
+					branchLat = branch[i].value[0];
+					branchLng = branch[i].value[1];
+				}
+				markerArray[i] = new google.maps.Marker({
+				    position: {lat: branch[i].value[0], lng: branch[i].value[1]},
+				    map: map
+				});
+			}
+
+			if (min != 999)
+			{
+				markerArray[minPos].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+				map.setCenter({lat: (lat + branchLat)/2,
+											lng: (lng + branchLng)/2
+				});
+
+			}
+		}
+
+		function distance(lat1, lng1, lat2, lng2)
+		{
+			var x = Math.abs(lat2 - lat1);
+			x = x * x;
+
+			var y = Math.abs(lng2 - lng1);
+			y = y * y;
+
+			return Math.sqrt(x + y);
+		}
+
+		function readTextFile(file)
+		{
+		    var rawFile = new XMLHttpRequest();
+		    rawFile.open("GET", file, false);
+		    rawFile.onreadystatechange = function ()
+		    {
+		        if(rawFile.readyState === 4)
+		        {
+		            if(rawFile.status === 200 || rawFile.status == 0)
+		            {
+		                branchInfo = rawFile.responseText;
+		            }
+		        }
+		    }
+		    rawFile.send(null);
+		}
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCO9WLr4P5J5CfvUr4Z4FgclNAp-jxT5KA&callback=initMap">
+    </script>
+  </body>
+</html>

@@ -1,43 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-	<title>Join</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Queuing Ticket</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/style.css">
+
+
 </head>
+
 <body>
-	<h1>Join Queue</h1>
-	<form onsubmit="makeJSON(this)" class="joinqueue">
-		<!-- <label for="Qpos">Qpos: </label>
-		<input type="number" name="Qpos" class="Qform"><br> -->
-		<label for="customerId">customerId: </label>
-		<input type="text" name="customerId" class="Qform"><br>
-
-		<label for="phone">Phone: </label>
-		<input type="text" name="phone" class="Qform"><br>
-
-		<label for="service">Service: </label>
-		<select name="service" class="Qform">
-
-			<option value="withdrawal">Withdrawal</option>
-			<option value="deposit">Deposit</option>
-			<option value="transfer">Transfer</option>
-		</select><br>
-		<label for="branch">Branch: </label>
-		<select name="branch" class="Qform">
-			<option value="KF">Kwai Fong</option>
-			<option value="MK">Mong Kok</option>
-			<option value="TP">Tai Po</option>
-		</select><br>
-		<input type="submit" name="Submit">
-	</form>
-
-	<div>
-		<h1>Send JSON to Node</h1>
-		<button onClick="sendJSON()">Send</button>
-		<p id ="result">
-		</p>
+<nav class="navbar navbar-default">
+  <div class="container"> 
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myDefaultNavbar1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a class="navbar-brand" href="#">Bank of China</a> </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="myDefaultNavbar1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">Link</a></li>
+      </ul>		
 	</div>
+    <!-- /.navbar-collapse --> 
+  </div>
+  <!-- /.container-fluid --> 
+</nav>
 
-	<script>
+<div class="container">
+	<div class="col-lg-6 col-md-6 col-sm-6">
+	<h2 align="center">Queuing ticket</h2><br>
+		
+	<form onsubmit="makeJSON(this)" class="form-horizontal Qform">
+		<div class="form-group">
+			<label for="name">Name: </label>
+			<input type="text" class="form-control Qform" name="name" id="name">
+		</div>
+		<div class="form-group">
+			<label for="phone">Phone: </label>
+			<input type="text" class="form-control Qform" name="phone" id="phone">
+		</div>
+		<div class="form-group">
+			<label for="service">Service: </label>
+			<select name="service" id="service" class="form-control Qform">
+				<option value="withdrawal">Withdrawal</option>
+				<option value="deposit">Deposit</option>
+				<option value="transfer">Transfer</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="branch">Branch: </label>
+			<select name="branch" id="branch" class="form-control Qform">
+				<option value="KF">Kwai Fong</option>
+				<option value="MK">Kwai Hing</option>
+				<option value="TP">Shek Yam</option>
+			</select>
+		</div>
+		<br>
+		<div class="form-group">
+			<input class="form-control" type="submit" name="Submit">
+		</div>
+	</form>
+	</div>
+</div>
+	
+</body>
+<hr>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="js/jquery-1.11.3.min.js"></script> 
+<!-- Include all compiled plugins (below), or include individual files as needed --> 
+<script src="js/bootstrap.js"></script>
+<script>
 
 		// var myData = [
 		// {
@@ -95,5 +131,4 @@ xmlhttp.send(JSON.stringify(objects));
 // }
 
 </script>
-</body>
 </html>

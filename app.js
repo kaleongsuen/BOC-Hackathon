@@ -42,8 +42,14 @@ connection.connect(function(error) {
   } 
 });
 
-app.post('/checkqueue.html', function(req, res){
 
+// app.get('/checkqueue.html', function(req, res) {
+//   console.log('in get');
+//   // res.sendFile(path.join(__dirname+ '/checkqueue.html'));
+// });
+
+app.post('/checkqueue.html', function(req, res){
+console.log('in post');
   var jsondata = req.body;
   var values = [];
   console.log('json: ')
@@ -51,17 +57,17 @@ app.post('/checkqueue.html', function(req, res){
   var id = jsondata[0].value;
   console.log("id: " + id);
   //Select all customers and return the result object:
-  var sql = "SELECT * FROM queue where customerId = \"" + id + "\"";
+  var sql = "SELECT * FROM queue where phone = \"" + id + "\"";
   console.log("sql" + sql);
   connection.query(sql, function (err, result, fields) {
     if (err) 
       throw err; 
     else{
       //res.send('select success');
-       console.log(result);
+      console.log(result);
       res.send(result);
     }
-   
+    
 
   });
 
@@ -98,7 +104,7 @@ app.post('/joinqueue.html', function(req, res) {
   console.log('values:');
   console.log(values);
 //Bulk insert using nested array [ [a,b],[c,d] ] will be flattened to (a,b),(c,d)
-connection.query('INSERT INTO queue (Qpos, customerId, phone, service, branch) VALUES ?', [values], function(err,result) {
+connection.query('INSERT INTO queue (Qpos, name, phone, service, branch) VALUES ?', [values], function(err,result) {
   if(err) {
     console.log('fail');
    res.send('Error');

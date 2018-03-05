@@ -23,7 +23,8 @@
     "dotenv": "^2.0.0",
     "express": "^4.16.1",
     "mysql": "^2.15.0",
-    "watson-developer-cloud": "^2.40.0"
+    "watson-developer-cloud": "^2.40.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",
