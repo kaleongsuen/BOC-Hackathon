@@ -111,7 +111,17 @@ connection.query('INSERT INTO queue (Qpos, name, phone, service, branch) VALUES 
  }
  else {
   console.log('suc');
-  res.send('Success');
+  var ressql = "SELECT * FROM queue where name = \"" + jsondata[0].value + "\" AND phone = \"" + jsondata[1].value + "\" AND service = \"" + jsondata[2].value + "\" AND branch = \"" + jsondata[3].value + "\"";
+  console.log("ressql: " + ressql);
+  connection.query(ressql, function(err, result, fields){
+    if (err){
+      throw err;
+      console.log("select qpos error");
+    } else {
+      console.log(result);
+      res.send(result);
+    }
+  });
 }
 });
   });
