@@ -11,7 +11,7 @@
 
 </head>
 
-<body>
+<body onload="findResult();">
 <nav class="navbar navbar-default">
   <div class="container"> 
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -33,7 +33,9 @@
 <div class="container">
 	<div class="col-lg-6 col-md-6 col-sm-6">
 	<h2 align="center">Queuing ticket</h2><br>
-		
+		<div>
+			<p align="center" id="ErrorStatment"></p>
+		</div>
 	<form onsubmit="makeJSON(this)" class="form-horizontal Qform">
 		<div class="form-group">
 			<label for="name">Name: </label>
@@ -55,13 +57,13 @@
 			<label for="branch">Branch: </label>
 			<select name="branch" id="branch" class="form-control Qform">
 				<option value="KF">Kwai Fong</option>
-				<option value="MK">Kwai Hing</option>
-				<option value="TP">Shek Yam</option>
+				<option value="MK">Mong Kok</option>
+				<option value="TP">Tai Po</option>
 			</select>
 		</div>
 		<br>
 		<div class="form-group">
-			<input class="form-control" type="submit" name="Submit">
+			<input class="form-control" type="submit" name="Submit" >
 		</div>
 	</form>
 	</div>
@@ -74,7 +76,15 @@
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="js/bootstrap.js"></script>
 <script>
-
+	function findResult(){
+		var result = window.location.search;
+		result = decodeURIComponent(result);
+		result = result.split("=");
+		result = result[1];
+		if(result == "fail"){
+			document.getElementById("ErrorStatment").innerHTML = "This phone is registered for one ticket, please check!";
+		}
+	}
 		// var myData = [
 		// {
 		// 	"name": "Bill",
@@ -104,17 +114,23 @@
 // return objects;  
 var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
 xmlhttp.onreadystatechange = function() {
+	console.log("in ready")
 	if (this.readyState == 4 && this.status == 200) {
-		document.getElementById("result").innerHTML =
-		this.responseText;
-
+		document.getElementById("result").innerHTML = this.responseText;
 	}
-	window.location = "http://localhost:3000/queueresult.html?result=" + this.responseText;
+	if (this.responseText == "1062"){
+		console.log("in 1062")
+		window.location = "http://localhost:3000/joinqueue.html?result=fail"
+
+	} else {
+		window.location = "http://localhost:3000/queueresult.html?result=" + this.responseText;
+	}
 };
 xmlhttp.open("POST", "http://localhost:3000/joinqueue.html");
 xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 console.log(objects);
 xmlhttp.send(JSON.stringify(objects));
+
 }
 
 // 		function sendJSON(){

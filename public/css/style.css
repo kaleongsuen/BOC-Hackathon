@@ -10,3 +10,7 @@ body{
 	position: relative;
 	margin-bottom: 10px;
 }
+
+#ErrorStatment{
+	color: red;
+}

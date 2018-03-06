@@ -73,6 +73,10 @@ console.log('in post');
 
 });
 
+app.get('/joinqueue.html', function(req, res){
+  res.sendFile(path.join(__dirname+ '/joinqueue.html'));
+});
+
 app.post('/joinqueue.html', function(req, res) {
 
   var jsondata = req.body;
@@ -107,7 +111,12 @@ app.post('/joinqueue.html', function(req, res) {
 connection.query('INSERT INTO queue (Qpos, name, phone, service, branch) VALUES ?', [values], function(err,result) {
   if(err) {
     console.log('fail');
-   res.send('Error');
+    
+    console.log(err.errno);
+    var errorCode = err.errno;
+    errorCode = errorCode.toString();
+    console.log(errorCode);
+    res.send(errorCode);
  }
  else {
   console.log('suc');
