@@ -3,13 +3,9 @@
   <head>
     <title>Geolocation</title>
     <script src="mapView.js"></script>
-    <script>
-      setTimeout(function(){
-        window.alert("Nearest Branch: " + getNearestBranchName());
-      }, 6000);
-    </script>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -23,11 +19,45 @@
         padding: 0;
       }
     </style>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/style.css">
+
   </head>
   <body>
-    <div id="map"></div>
+	<nav class="navbar navbar-default menu-border">
+	<div class="container"> 
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+	  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myDefaultNavbar1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+	  <a class="navbar-brand" href="#"><img src="images/BOC_Logo.png" style="display: inline-block; height: 28px;"></a> </div>
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse" id="myDefaultNavbar1">
+	  <ul class="nav navbar-nav">
+		<li class="active"><a href="index.html">HOME <span class="sr-only">(current)</span></a></li>
+		<li><a href="#">CHATBOT</a></li>
+		<li><a href="queue.html">QUEUE FOR SERVICES</a></li>
+		<li><a href="checkcurrent.html">CHECK QUEUING STATUS</a></li>
+		<li><a href="#">RESERVATION</a></li>
+		<li><a href="#">FIND NEAREST BRANCH</a></li>
+		<li><a href="#">ABOUT US</a></li>
+	  </ul>	
+	  <ul class="nav navbar-nav navbar-right">
+		<li><a href="#"><span class="glyphicon">&#xe161;</span> LOGIN TO E-BANKING</a></li>
+	  </ul>
+
+	</div>
+	<!-- /.navbar-collapse --> 
+	</div>
+	<!-- /.container-fluid --> 
+	</nav>
+	
+	<h1 align="center" style="font-size:25px;">Find the nearest branch</h1>
+	<div id="map"></div>
+
     <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCO9WLr4P5J5CfvUr4Z4FgclNAp-jxT5KA&callback=initMap">
     </script>
+	<script src="js/jquery-1.11.3.min.js"></script> 
+	<script src="js/bootstrap.js"></script>
   </body>
 </html>

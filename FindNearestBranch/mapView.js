@@ -13,7 +13,7 @@ obj = JSON.parse(branchInfo);
 var len = obj.length;
 for (i = 0; i < len; i++)
 {
-	branchName.push(obj[i].name)
+	branchName.push(obj[i].name);
 	branch.push({
 		key: obj[i].name,
 		value: [obj[i].address_coordinates.latitude, obj[i].address_coordinates.longitude]
@@ -22,7 +22,7 @@ for (i = 0; i < len; i++)
 
 function initMap()
 {
-	map = new google.maps.Map(//document.getElementById('map'),
+	map = new google.maps.Map(document.getElementById('map'),
 	{
 	  center: {lat: 22.31552, lng: 114.16769},
 	  zoom: 13
@@ -45,8 +45,8 @@ function initMap()
 			};
 			
 			// Debug
-			pos = {lat: 22.259609, lng:114.132728};
-			dem = true;
+			//pos = {lat: 22.259609, lng:114.132728};
+			dem = false;
 
 			marker = new google.maps.Marker(
 			{
@@ -56,8 +56,17 @@ function initMap()
 	      	marker.setIcon('blue-dot-30.png');
 			map.setCenter(pos);
 			smoothZoom(map, 17, map.getZoom());
-			showNearestBranch(pos.lat, pos.lng, dem);
-			
+			const promise = new Promise(function(resolve, reject){
+				showNearestBranch(pos.lat, pos.lng, dem);
+				resolve(1);
+			});
+		
+			promise.then((response)=>{
+				if(response){
+					getNearestBranchName();
+				}
+			});
+												 
 		}, function()
 		{
 			handleLocationError(true, infoWindow, map.getCenter());
@@ -66,7 +75,7 @@ function initMap()
 		// Browser doesn't support Geolocation
 		handleLocationError(false, infoWindow, map.getCenter());
 	}
-
+	
 	return pos;
 }
 
@@ -88,7 +97,7 @@ function smoothZoom (map, max, cnt)
             google.maps.event.removeListener(z);
             smoothZoom(map, max, cnt + 1);
         });
-        setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+        setTimeout(function(){map.setZoom(cnt);}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
     }
 }
 
@@ -158,7 +167,7 @@ function getNearestBranchName()
 {
 	
 	if (isReady)
-		return nearestBranchName;
+		window.alert(nearestBranchName);
 }
 
 function distance(lat1, lng1, lat2, lng2)
