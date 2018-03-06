@@ -75,8 +75,6 @@ function initMap()
 		// Browser doesn't support Geolocation
 		handleLocationError(false, infoWindow, map.getCenter());
 	}
-	
-	return pos;
 }
 
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
@@ -159,7 +157,6 @@ function showNearestBranch(lat, lng, dem)
 	}
 
 	isReady = true;
-	return nearestBranchName;
 }
 
 
@@ -167,7 +164,9 @@ function getNearestBranchName()
 {
 	
 	if (isReady)
-		window.alert(nearestBranchName);
+	{
+		document.getElementById("3nearestBranchName").innerHTML = nearestBranchName;
+	}
 }
 
 function distance(lat1, lng1, lat2, lng2)
