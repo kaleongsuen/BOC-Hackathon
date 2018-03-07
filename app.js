@@ -37,7 +37,7 @@ const connection = mysql.createConnection({
 connection.connect(function(error) {
   if(error){
     console.log('error' + error);
-  } else{
+  } else{ 
     console.log('db success');
   } 
 });
@@ -73,9 +73,34 @@ console.log('in post');
 
 });
 
-app.get('/joinqueue.html', function(req, res){
-  res.sendFile(path.join(__dirname+ '/joinqueue.html'));
+app.post('/checkcurrent.html', function(req, res){
+console.log('in post');
+  var jsondata = req.body;
+  var values = [];
+  console.log('json: ')
+  console.dir(jsondata);
+  var service = jsondata[0].value;
+  var branch = jsondata[1].value;
+  console.log("service: " + service + "branch: " + branch);
+  //Select all customers and return the result object:
+  var sql = "SELECT MAX(Qpos) resultPOS FROM queue where service = \"" + service + "\"" + " AND branch = \"" + branch + "\"";
+  console.log("sql" + sql);
+  connection.query(sql, function (err, result, fields) {
+    if (err) 
+      throw err; 
+    else{
+      //res.send('select success');
+      console.log(result);
+      res.send(result);
+    }
+    
+
+  });
+
 });
+
+
+
 
 app.post('/joinqueue.html', function(req, res) {
 
@@ -115,7 +140,7 @@ connection.query('INSERT INTO queue (Qpos, name, phone, service, branch) VALUES 
     console.log(err.errno);
     var errorCode = err.errno;
     errorCode = errorCode.toString();
-    console.log(errorCode);
+    
     res.send(errorCode);
  }
  else {
@@ -128,7 +153,9 @@ connection.query('INSERT INTO queue (Qpos, name, phone, service, branch) VALUES 
       console.log("select qpos error");
     } else {
       console.log(result);
+
       res.send(result);
+      console.log('res send result');
     }
   });
 }
