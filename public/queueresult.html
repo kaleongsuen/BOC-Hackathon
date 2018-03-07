@@ -23,7 +23,9 @@
 	</div>
 
 	<div id="qrcode"></div>
-
+<script type="text/javascript">
+new QRCode(document.getElementById("qrcode"), window.location.href);
+</script>
 
 	<script>
 		// function findGetParameter(parameterName) {
@@ -38,8 +40,6 @@
 		// 	console.log(result);
 		// }
 		function findGetParameter(){
-			var url = window.location.href;
-			console.log(url);
 			var queryStr = window.location.search;
 			queryStr = decodeURIComponent(queryStr);
 			queryStr = queryStr.split("=");
@@ -53,8 +53,6 @@
 			document.getElementById("QPos").innerHTML = queryStr.Qpos;
 			document.getElementById("service").innerHTML = queryStr.service;
 			document.getElementById("branch").innerHTML = queryStr.branch;
-			new QRCode(document.getElementById("qrcode"), url);
-
 		}
 
 

@@ -115,7 +115,7 @@ xmlhttp.onreadystatechange = function() {
     	console.log(this.responseText);
        document.getElementById("result").innerHTML = this.responseText;
        
-       window.location = "http://localhost:3000/checkcurrent.html?result=" + this.responseText;
+       window.location.href = "http://localhost:3000/checkcurrent.html?result=" + this.responseText;
     }
  };
 xmlhttp.open("POST", "http://localhost:3000/checkcurrent.html", true);
