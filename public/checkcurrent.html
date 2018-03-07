@@ -93,9 +93,13 @@ function getResult(){
 
 			console.log(queryStr);
 			console.log(queryStr.resultPOS);
-			document.getElementById("QPos").innerHTML = queryStr.resultPOS;
+			if (queryStr.resultPOS == null) {
+				document.getElementById("QPos").innerHTML = "No ppl";	
+			} else{
+				document.getElementById("QPos").innerHTML = queryStr.resultPOS;	
+			}
 			
-
+			
 		}
 
 function getJSON(form){
@@ -113,9 +117,9 @@ xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
 
     	console.log(this.responseText);
-       document.getElementById("result").innerHTML = this.responseText;
+       //document.getElementById("result").innerHTML = this.responseText;
        
-       window.location.href = "http://localhost:3000/checkcurrent.html?result=" + this.responseText;
+       window.location = "http://localhost:3000/checkcurrent.html?result=" + this.responseText;
     }
  };
 xmlhttp.open("POST", "http://localhost:3000/checkcurrent.html", true);
