@@ -44,7 +44,7 @@
 	<form onsubmit="getJSON(this);" class="form-horizontal CQform">
 		<div class="form-group">
 			<label for="service">Service: </label>
-			<select name="service" id="service" class="form-control">
+			<select name="service" id="service" class="form-control CQform">
 				<option value="withdrawal">Withdrawal</option>
 				<option value="deposit">Deposit</option>
 				<option value="transfer">Transfer</option>
@@ -92,11 +92,11 @@ function getResult(){
 
 			console.log(queryStr);
 			console.log(queryStr.resultPOS);
-			
+
 			if (queryStr.resultPOS == null) {
-				document.getElementById("QPos").innerHTML = "No ppl";	
+				document.getElementById("QPos").innerHTML = "No one is queuing.";	
 			} else{
-				document.getElementById("QPos").innerHTML = queryStr.resultPOS;	
+				document.getElementById("QPos").innerHTML = "People queuing: " + queryStr.resultPOS;	
 			}
 			
 			

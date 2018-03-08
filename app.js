@@ -93,8 +93,6 @@ console.log('in post');
       console.log(result);
       res.send(result);
     }
-    
-
   });
 
 });

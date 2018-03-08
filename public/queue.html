@@ -38,7 +38,9 @@
 	<div class="col-lg-6 col-md-6 col-sm-6">
 	<h1 align="center">Get a queuing ticket</h1><br>
 	<div id="map" style="display: none;"></div>
-		
+		<div>
+			<p id="ErrorStatment" style="color: red" align="left"></p>
+		</div>
 	<form onsubmit="makeJSON(this)" class="form-horizontal Qform">
 		<div class="form-group">
 			<label for="name">Name: </label>
@@ -46,7 +48,7 @@
 		</div>
 		<div class="form-group">
 			<label for="phone">Phone: </label>
-			<input type="text" class="form-control Qform" name="phone" id="phone">
+			<input type="text" class="form-control Qform" name="phone" id="phone" required="required">
 		</div>
 		<div class="form-group">
 			<label for="service">Service: </label>
@@ -83,8 +85,9 @@
 			result = decodeURIComponent(result);
 			result = result.split("=");
 			result = result[1];
+			console.log(result);
 			if(result == "fail"){
-				document.getElementById("ErrorStatment").innerHTML = "This phone is registered for one ticket, please check!";
+				document.getElementById("ErrorStatment").innerHTML = "This phone is registered for a ticket, please check!";
 			}
 		}
 		// var myData = [
@@ -102,40 +105,7 @@
 		// }
 		// ]
 		
-		function Mobile_makeJSON(jsonObj){
-			var objects = jsonObj; 
-			
-			
-			// for(var i=0;i<4;i++){  
-			// 	objects[objects.length] = { name: fields[i].getAttribute("name"), value: fields[i].value };  
-			// }  
-			
-			console.log("object: " + objects);
 
-// return objects;  
-var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-xmlhttp.onreadystatechange = function() {
-	console.log("in ready")
-	if (this.readyState == 4 && this.status == 200) {
-		//document.getElementById("result").innerHTML = this.responseText;
-		// alert('hi');
-		// alert(this.responseText);
-	}
-	if (this.responseText == "1062"){
-		console.log("in 1062")
-		window.location.href = "http://localhost:3000/queue.html?result=fail"
-		
-
-	} else {
-		window.location.href = "http://localhost:3000/queueresult.html?result=" + this.responseText;
-	}
-	//return this.responseText;
-};
-xmlhttp.open("POST", "http://localhost:3000/queue.html");
-xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-console.log(objects);
-xmlhttp.send(JSON.stringify(objects));
-}
 
 
 function makeJSON(form){
