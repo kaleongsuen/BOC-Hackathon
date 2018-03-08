@@ -11,7 +11,7 @@
 
 </head>
 
-<body>
+<body onload="getResult();">
 <nav class="navbar navbar-default menu-border">
   <div class="container"> 
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -21,11 +21,11 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="myDefaultNavbar1">
       <ul class="nav navbar-nav">
-        <li><a href="index.html">HOME</a></li>
+        <li><a href="index.html">HOME </a></li>
         <li><a href="chatbot.html">CHATBOT</a></li>
 		<li><a href="queue.html">QUEUE FOR SERVICES</a></li>
-		<li class="active"><a href="checkcurrent.html">VIEW MY TICKET <span class="sr-only">(current)</span></a></li>
-		<li><a href="queuenow.html">VIEW QUEUE</a></li>
+		<li><a href="checkcurrent.html">VIEW MY TICKET</a></li>
+		  <li class="active"><a href="queuenow.html">VIEW QUEUE<span class="sr-only">(current)</span></a></li>
 		<li><a href="mapView.html">FIND NEAREST BRANCH</a></li>
 	 	<li><a href="about.html">ABOUT US</a></li>
 	  </ul>	
@@ -38,41 +38,78 @@
 
 <div class="container">
 	<div class="col-lg-6 col-md-6 col-sm-6">
-	<h1 align="center">View my ticket</h1><br>
+	<h1 align="center">View branch queue</h1><br>
+	<div id="map" style="display: none;"></div>
 		
 	<form onsubmit="getJSON(this);" class="form-horizontal CQform">
-	<div class="form-group">
-		<label for="phone">Your phone number: </label>
-		<input type="text" id="phone" name="phone" class="form-control CQform"><br>
-	</div>
-	<div class="form-group">
-		<input class="form-control btn btn-danger" type="submit" name="Submit">
-	</div>
+		<div class="form-group">
+			<label for="service">Service: </label>
+			<select name="service" id="service" class="form-control">
+				<option value="withdrawal">Withdrawal</option>
+				<option value="deposit">Deposit</option>
+				<option value="transfer">Transfer</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="branch">Branch: </label>
+			<select name="branch" id="nearestBranchName" class="form-control CQform">
+			</select>
+		</div>
+		<br>
+		<div class="form-group">
+			<input class="form-control btn btn-danger" type="submit" name="Submit">
+		</div>
 	</form>
-	
-	<p id ="result">
-    </p>
-
 	</div>
+	
+	<p align="center" style="font-size: 20pt;" id ="QPos">
+    </p>
 </div>
 	
 </body>
 <hr>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="js/jquery-1.11.3.min.js"></script> 
+<script src="mapView.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCO9WLr4P5J5CfvUr4Z4FgclNAp-jxT5KA&callback=initMap"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="js/bootstrap.js"></script>
 <script>
 
+function getResult(){
+			var queryStr = window.location.href;
+			console.log(queryStr);
+			var queryStr = window.location.search;
+			queryStr = decodeURIComponent(queryStr);
+			queryStr = queryStr.split("=");
+			queryStr = queryStr[1];
+			console.log(queryStr);
+			queryStr = queryStr.replace("[","");
+			console.log(queryStr);
+			queryStr = queryStr.replace("]","");
+			console.log(queryStr);
+			queryStr = JSON.parse(queryStr);
+
+			console.log(queryStr);
+			console.log(queryStr.resultPOS);
+			
+			if (queryStr.resultPOS == null) {
+				document.getElementById("QPos").innerHTML = "No ppl";	
+			} else{
+				document.getElementById("QPos").innerHTML = queryStr.resultPOS;	
+			}
+			
+			
+		}
 
 function getJSON(form){
 var objects = []; 
 			if (typeof form == 'object' && form.nodeName.toLowerCase() == "form") {  
 				var fields = form.getElementsByClassName("CQform");  
 				console.log('in if');
-				// for(var i=0;i<fields.length;i++){  
-					objects[objects.length] = { name: fields[0].getAttribute("name"), value: fields[0].value };  
-				// }  
+				for(var i=0;i<2;i++){ 
+					objects[objects.length] = { name: fields[i].getAttribute("name"), value: fields[i].value };  
+				}  
 			}  
 			console.log(objects);
 			var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
@@ -80,16 +117,15 @@ xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
 
     	console.log(this.responseText);
-       document.getElementById("result").innerHTML = this.responseText;
+       //document.getElementById("result").innerHTML = this.responseText;
        
-       window.location = "http://localhost:3000/queueresult.html?result=" + this.responseText;
+       window.location = "http://localhost:3000/queuenow.html?result=" + this.responseText;
     }
  };
-xmlhttp.open("POST", "http://localhost:3000/checkcurrent.html", true);
+xmlhttp.open("POST", "http://localhost:3000/queuenow.html", true);
 xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 xmlhttp.send(JSON.stringify(objects));
 //xmlhttp.send(null);
 }
-
 </script>
 </html>

@@ -48,7 +48,7 @@ connection.connect(function(error) {
 //   // res.sendFile(path.join(__dirname+ '/checkqueue.html'));
 // });
 
-app.post('/checkqueue.html', function(req, res){
+app.post('/checkcurrent.html', function(req, res){
 console.log('in post');
   var jsondata = req.body;
   var values = [];
@@ -73,7 +73,7 @@ console.log('in post');
 
 });
 
-app.post('/checkcurrent.html', function(req, res){
+app.post('/queuenow.html', function(req, res){
 console.log('in post');
   var jsondata = req.body;
   var values = [];
@@ -102,7 +102,7 @@ console.log('in post');
 
 
 
-app.post('/joinqueue.html', function(req, res) {
+app.post('/queue.html', function(req, res) {
 
   var jsondata = req.body;
   var values = [];
