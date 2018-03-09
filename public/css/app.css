@@ -6,7 +6,7 @@ body {
 
 div {
   word-wrap: break-word;
-  line-height: 1.25rem;
+  line-height: 1.5rem;
 }
 
 #view-change-button {
@@ -104,10 +104,10 @@ div {
 
 .from-user .message-inner {
   position: relative;
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: #fff;
   letter-spacing: 0.015rem;
-  line-height: 1.3125rem;
+  line-height: 1.75rem;
   background: #00B4A0;
   border-radius: 1.25rem;
   border-bottom-right-radius: 0;
@@ -118,7 +118,7 @@ div {
 }
 
 .from-user .message-inner p {
-  margin: 0.3125rem;
+  margin: 0.6rem;
   padding: 0 0.9375rem;
 }
 
@@ -150,10 +150,10 @@ div {
 .from-watson .message-inner {
   position: relative;
   border-radius: 1.5625rem;
-  font-size: 1rem;
+  font-size: 1.5rem;
   color: #B5B5B5;
   letter-spacing: 0.015rem;
-  line-height: 1.3125rem;
+  line-height: 1.75rem;
 }
 
 .from-watson.latest .message-inner {
@@ -161,7 +161,7 @@ div {
 }
 
 .from-watson p {
-  margin: 0.3125rem;
+  margin: 0.6rem;
   padding: 0 1.25rem;
 }
 

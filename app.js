@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 
 const mysql = require('mysql');
 const connection = mysql.createConnection({
-  host : 'localhost',
+  host : '127.0.0.1',
   user : 'root',
   password : 'akea0462',
   database: 'queueDB'

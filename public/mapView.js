@@ -46,7 +46,7 @@ function initMap()
 			};
 			
 			// Debug
-			pos = {lat: 22.259609, lng:114.132728};
+			pos = {lat: 22.262006, lng: 114.132593};
 			dem = true;
 
 			marker = new google.maps.Marker(
@@ -56,7 +56,7 @@ function initMap()
 	      	});
 	      	marker.setIcon('blue-dot-30.png');
 			map.setCenter(pos);
-			smoothZoom(map, 17, map.getZoom());
+			smoothZoom(map, 15, map.getZoom());
 			const promise = new Promise(function(resolve, reject){
 				showNearestBranch(pos.lat, pos.lng, dem);
 				resolve(1);
