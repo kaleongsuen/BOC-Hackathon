@@ -7,6 +7,12 @@
 <title>Bank of China</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/style.css">
+<style>
+.imgcontainer{
+	max-width:100%;
+	text-align: center;
+}
+</style>
 </head>
 
 <body onload="findResult();">
@@ -34,45 +40,43 @@
   <!-- /.container-fluid --> 
 </nav>
 
-<div class="container">
+	<div class="imgcontainer">
+		<img src="images/loading.gif" width="100%">
+	</div>
+
+<div class="container" style="display:none;">
 	<div class="col-lg-6 col-md-6 col-sm-6">
-	<h1 align="center">Get a queuing ticket</h1><br>
 	<div id="map" style="display: none;"></div>
 		<div>
 			<p id="ErrorStatment" style="color: red" align="left"></p>
 		</div>
 	<form onsubmit="makeJSON(this)" class="form-horizontal Qform">
 		<div class="form-group">
-			<label for="name">Name: </label>
-			<input type="text" class="form-control Qform" name="name" id="name">
+			<input type="text" class="form-control Qform" name="name" id="name" value="<%= name%>">
 		</div>
 		<div class="form-group">
-			<label for="phone">Phone: </label>
-			<input type="text" class="form-control Qform" name="phone" id="phone" required="required">
+			<input type="text" class="form-control Qform" name="phone" id="phone" required="required" value="<%= phone%>">
 		</div>
 		<div class="form-group">
-			<label for="service">Service: </label>
-			<select name="service" id="service" class="form-control Qform">
+			<select name="service" id="service" class="form-control Qform" value="<%= service%>" >
 				<option value="withdrawal">Withdrawal</option>
 				<option value="deposit">Deposit</option>
 				<option value="transfer">Transfer</option>
 			</select>
 		</div>
 		<div class="form-group">
-			<label for="branch">Branch: </label>
-			<select name="branch" id="nearestBranchName" class="form-control Qform">
-			</select>
+			<input name="branch" id="nearestBranchName" class="form-control Qform" value="<%= branch%>">
 		</div>
 		<br>
 		<div class="form-group">
-			<input class="form-control btn btn-danger" type="submit" name="Submit">
+			<input class="form-control btn btn-danger" type="submit" name="Submit" id="Submit">
 		</div>
 	</form>
 	</div>
 </div>
 	
 </body>
-<hr>
+<br>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
 <script src="mapView.js"></script>
 <script src="js/jquery-1.11.3.min.js"></script>
@@ -87,7 +91,7 @@
 			result = result[1];
 			console.log(result);
 			if(result == "fail"){
-				document.getElementById("ErrorStatment").innerHTML = "This phone has been used, please check!";
+				document.getElementById("ErrorStatment").innerHTML = "This phone is registered for a ticket, please check!";
 			}
 		}
 		// var myData = [
@@ -105,9 +109,6 @@
 		// }
 		// ]
 		
-
-
-
 function makeJSON(form){
 	var objects = []; 
 	console.log(form);
@@ -160,6 +161,8 @@ xmlhttp.send(JSON.stringify(objects));
 // xmlhttp.send(JSON.stringify(myData));
 
 // }
+
+$('#Submit').click();
 
 </script>
 </html>

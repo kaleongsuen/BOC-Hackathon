@@ -64,7 +64,9 @@
 </div>
 	
 <script type="text/javascript">
-	new QRCode(document.getElementById("qrcode"), window.location.href);
+	var link = window.location.href;
+	link = decodeURIComponent(link);
+	new QRCode(document.getElementById("qrcode"), link);
 </script>
 	
 <script>
