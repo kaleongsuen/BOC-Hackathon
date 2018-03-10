@@ -67,17 +67,23 @@ console.log('in post');
   var sql = "SELECT * FROM queue where phone = \"" + id + "\"";
   console.log("sql" + sql);
   connection.query(sql, function (err, result, fields) {
-    if (err) 
+    if (err) {
       throw err; 
-    else{
+    }else{
       //res.send('select success');
-      console.log(result);
-      res.send(result);
+      if(result.length != 0){
+		console.log(result);
+      	res.send(result);
+      } else{
+		console.log("result_not_found");
+    	res.send("result_not_found");
+      }
+      
     }
-    
+
+
 
   });
-
 });
 
 app.post('/queuenow.html', function(req, res){
