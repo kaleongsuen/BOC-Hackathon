@@ -4,26 +4,32 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Check Current Queue</title>
+<title>Bank of China</title>
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="css/style.css">
 
 
 </head>
 
-<body>
-<nav class="navbar navbar-default">
+<body onload="checkresult();">
+<nav class="navbar navbar-default menu-border">
   <div class="container"> 
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myDefaultNavbar1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-      <a class="navbar-brand" href="#">Bank of China</a> </div>
+      <a class="navbar-brand" href="index.html"><img src="images/BOC_Logo.png" style="display: inline-block; height: 28px;"></a> </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="myDefaultNavbar1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
-      </ul>		
+        <li><a href="index.html">HOME</a></li>
+        <li><a href="chatbot.html">CHATBOT</a></li>
+		<li><a href="queue.html">QUEUE FOR SERVICES</a></li>
+		<li class="active"><a href="checkcurrent.html">VIEW MY TICKET <span class="sr-only">(current)</span></a></li>
+		<li><a href="queuenow.html">VIEW QUEUE</a></li>
+		<li><a href="mapView.html">FIND NEAREST BRANCH</a></li>
+	 	<li><a href="about.html">ABOUT US</a></li>
+	  </ul>	
+
 	</div>
     <!-- /.navbar-collapse --> 
   </div>
@@ -32,20 +38,20 @@
 
 <div class="container">
 	<div class="col-lg-6 col-md-6 col-sm-6">
-	<h2 align="center">Check current queue</h2><br>
-		
+	<h1 align="center">View my ticket</h1><br>
+		<p id ="result" style="color: red">
+    </p>
 	<form onsubmit="getJSON(this);" class="form-horizontal CQform">
 	<div class="form-group">
 		<label for="phone">Your phone number: </label>
-		<input type="text" id="phone" name="phone" class="form-control CQform"><br>
+		<input type="text" id="phone" name="phone" class="form-control CQform" required="required"><br>
 	</div>
 	<div class="form-group">
-		<input class="form-control" type="submit" name="Submit">
+		<input class="form-control btn btn-danger" type="submit" name="Submit">
 	</div>
 	</form>
 	
-	<p id ="result">
-    </p>
+	
 
 	</div>
 </div>
@@ -57,6 +63,18 @@
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
 <script src="js/bootstrap.js"></script>
 <script>
+
+function checkresult(){
+	var result = window.location.search;
+			result = decodeURIComponent(result);
+			result = result.split("=");
+			result = result[1];
+			console.log(result);
+			if(result == "result_not_found"){
+				document.getElementById("result").innerHTML = "No Ticket Found!";
+			}
+}
+
 
 
 function getJSON(form){
@@ -74,12 +92,16 @@ xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
 
     	console.log(this.responseText);
-       document.getElementById("result").innerHTML = this.responseText;
+       //document.getElementById("result").innerHTML = this.responseText;
+       if(this.responseText == "result_not_found"){
+       	window.location = "http://localhost:3000/checkcurrent.html?result=" + this.responseText;
+       } else{
+       	window.location = "http://localhost:3000/queueresult.html?result=" + this.responseText;
+       }
        
-       window.location = "http://localhost:3000/queueresult.html?result=" + this.responseText;
     }
  };
-xmlhttp.open("POST", "http://localhost:3000/checkqueue.html", true);
+xmlhttp.open("POST", "http://localhost:3000/checkcurrent.html", true);
 xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 xmlhttp.send(JSON.stringify(objects));
 //xmlhttp.send(null);

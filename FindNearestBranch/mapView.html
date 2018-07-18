@@ -2,10 +2,8 @@
 <html>
   <head>
     <title>Geolocation</title>
-    <script src="mapView.js"></script>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -19,46 +17,203 @@
         padding: 0;
       }
     </style>
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/style.css">
-
   </head>
   <body>
-	<nav class="navbar navbar-default menu-border">
-	<div class="container"> 
-	<!-- Brand and toggle get grouped for better mobile display -->
-	<div class="navbar-header">
-	  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myDefaultNavbar1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-	  <a class="navbar-brand" href="#"><img src="images/BOC_Logo.png" style="display: inline-block; height: 28px;"></a> </div>
-	<!-- Collect the nav links, forms, and other content for toggling -->
-	<div class="collapse navbar-collapse" id="myDefaultNavbar1">
-	  <ul class="nav navbar-nav">
-		<li class="active"><a href="index.html">HOME <span class="sr-only">(current)</span></a></li>
-		<li><a href="#">CHATBOT</a></li>
-		<li><a href="queue.html">QUEUE FOR SERVICES</a></li>
-		<li><a href="checkcurrent.html">CHECK QUEUING STATUS</a></li>
-		<li><a href="#">RESERVATION</a></li>
-		<li><a href="#">FIND NEAREST BRANCH</a></li>
-		<li><a href="#">ABOUT US</a></li>
-	  </ul>	
-	  <ul class="nav navbar-nav navbar-right">
-		<li><a href="#"><span class="glyphicon">&#xe161;</span> LOGIN TO E-BANKING</a></li>
-	  </ul>
+    <div id="map"></div>
+    <script>
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
 
-	</div>
-	<!-- /.navbar-collapse --> 
-	</div>
-	<!-- /.container-fluid --> 
-	</nav>
-	
-	<h1 align="center" style="font-size:25px;">Find the nearest branch</h1>
-	<div id="3nearestBranchName"></div>
-	<div id="map"></div>
+      	var map;
+      	//var directionsDisplay;
+		//var directionsService = new google.maps.DirectionsService();
 
-    <script
+		
+      	var branchName = [];
+      	var branch = [];
+      	
+      	var branchInfo = "";
+      	readTextFile("branch.json");
+		console.log(branchInfo);
+		obj = JSON.parse(branchInfo);
+		
+		var len = obj.length;
+		for (i = 0; i < len; i++)
+		{
+			branchName.push(obj[i].name)
+			branch.push({
+				key: obj[i].name,
+				value: [obj[i].address_coordinates.latitude, obj[i].address_coordinates.longitude]
+			});
+		}
+
+      	function initMap()
+      	{
+      		map = new google.maps.Map(document.getElementById('map'),
+	        {
+	          center: {lat: 22.31552, lng: 114.16769},
+	          zoom: 13
+	        });
+	        var infoWindow = new google.maps.InfoWindow({map: map});
+
+	        // Try HTML5 geolocation.
+	        if (navigator.geolocation)
+	        {
+				navigator.geolocation.getCurrentPosition(function(position)
+				{
+					var pos =
+					{
+						lat: position.coords.latitude,
+						lng: position.coords.longitude
+					};
+					//window.alert(pos.lat);
+
+					//infoWindow.setPosition(pos);
+					//infoWindow.setContent('Your Current Locaiton');
+					marker = new google.maps.Marker(
+					{
+				        position: pos,
+				        map: map
+			      	});
+			      	marker.setIcon('blue-dot-30.png');
+					map.setCenter(pos);
+					smoothZoom(map, 17, map.getZoom());
+					showNearestBranch(pos.lat, pos.lng);
+					
+				}, function()
+				{
+					handleLocationError(true, infoWindow, map.getCenter());
+				});
+	        } else {
+	        	// Browser doesn't support Geolocation
+	        	handleLocationError(false, infoWindow, map.getCenter());
+	        }
+      	}
+
+      	function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+	        infoWindow.setPosition(pos);
+	        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      	}
+
+		// the smooth zoom function
+		function smoothZoom (map, max, cnt) 
+		{
+		    if (cnt >= max) {
+		        return;
+		    }
+		    else {
+		        z = google.maps.event.addListener(map, 'zoom_changed', function(event){
+		            google.maps.event.removeListener(z);
+		            smoothZoom(map, max, cnt + 1);
+		        });
+		        setTimeout(function(){map.setZoom(cnt)}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+		    }
+		}
+
+		function showNearestBranch(lat, lng)
+		{
+			var len = branchName.length;
+
+			var min = 999;
+			var minPos;
+			var name = '';
+			var branchLat = 0;
+			var branchLng = 0;
+			var markerArray = [];
+			for (i = 0; i < len; i++)
+			{
+				var dist = distance(lat, lng, branch[i].value[0], branch[i].value[1]);
+				if (dist < min)
+				{
+					min = dist;
+					minPos = i;
+					name = branch[i].key
+					branchLat = branch[i].value[0];
+					branchLng = branch[i].value[1];
+				}
+				markerArray[i] = new google.maps.Marker({
+				    position: {lat: branch[i].value[0], lng: branch[i].value[1]},
+				    map: map
+				});
+			}
+
+			if (min != 999)
+			{
+				markerArray[minPos].setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png')
+				map.setCenter({lat: (lat + branchLat)/2,
+											lng: (lng + branchLng)/2
+				});
+
+			}
+		}
+
+		function distance(lat1, lng1, lat2, lng2)
+		{
+			var x = Math.abs(lat2 - lat1);
+			x = x * x;
+
+			var y = Math.abs(lng2 - lng1);
+			y = y * y;
+
+			return Math.sqrt(x + y);
+		}
+
+		function readTextFile(file)
+		{
+		    var rawFile = new XMLHttpRequest();
+		    rawFile.open("GET", file, false);
+		    rawFile.onreadystatechange = function ()
+		    {
+		        if(rawFile.readyState === 4)
+		        {
+		            if(rawFile.status === 200 || rawFile.status == 0)
+		            {
+		                branchInfo = rawFile.responseText;
+		            }
+		        }
+		    }
+		    rawFile.send(null);
+		}
+		
+		/*
+		function initMap()
+		{
+			directionsDisplay = new google.maps.DirectionsRenderer();
+			var chicago = new google.maps.LatLng(41.850033, -87.6500523);
+			var mapOptions = {
+				zoom:7,
+				center: chicago
+			}
+			map = new google.maps.Map(document.getElementById('map'), mapOptions);
+			directionsDisplay.setMap(map);
+		}
+
+
+		function showRoute()
+		{
+			var start = document.getElementById('start').value;
+			var end = document.getElementById('end').value;
+			var request = {
+				origin: start,
+				destination: end,
+				travelMode: 'DRIVING'
+			};
+			
+			directionsService.route(request, function(result, status) {
+			
+			if (status == 'OK') {
+				directionsDisplay.setDirections(result);
+			}
+			});
+		}
+*/
+    </script>
+    <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCO9WLr4P5J5CfvUr4Z4FgclNAp-jxT5KA&callback=initMap">
     </script>
-	<script src="js/jquery-1.11.3.min.js"></script> 
-	<script src="js/bootstrap.js"></script>
   </body>
 </html>

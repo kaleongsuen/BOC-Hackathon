@@ -1,0 +1,39 @@
+@charset "UTF-8";
+/* CSS Document */
+body{
+	background-color:whitesmoke;
+}
+
+h1{
+	font-size: 20pt;
+}
+
+.square{
+	border-top: 3px #d2296e solid;
+	width: 100%;
+	height: auto;
+	position: relative;
+	margin-bottom: 20px;
+}
+
+.menu-border{
+	border-bottom: 5px grey solid;
+}
+
+.navbar-brand {
+  transform: translateX(-50%);
+  left: 50%;
+  position: absolute;
+}
+
+.form-horizontal{
+	font-size: 12pt;
+}
+
+.form-horizontal label{
+	font-size: 12pt;
+}
+
+.intro{
+	text-align: center;
+}

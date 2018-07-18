@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank of China</title>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body onload="findResult();">
+<nav class="navbar navbar-default menu-border">
+  <div class="container"> 
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myDefaultNavbar1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a class="navbar-brand" href="index.html"><img src="images/BOC_Logo.png" style="display: inline-block; height: 28px;"></a> </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="myDefaultNavbar1">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">HOME </a></li>
+        <li><a href="chatbot.html">CHATBOT</a></li>
+		<li class="active"><a href="queue.html">QUEUE FOR SERVICES<span class="sr-only">(current)</span></a></li>
+		<li><a href="checkcurrent.html">VIEW MY TICKET</a></li>
+		<li><a href="queuenow.html">VIEW QUEUE</a></li>
+		<li><a href="mapView.html">FIND NEAREST BRANCH</a></li>
+	 	<li><a href="about.html">ABOUT US</a></li>
+	  </ul>	
+	  
+
+	</div>
+    <!-- /.navbar-collapse --> 
+  </div>
+  <!-- /.container-fluid --> 
+</nav>
+
+<div class="container">
+	<div class="col-lg-6 col-md-6 col-sm-6">
+	<h1 align="center">Get a queuing ticket</h1><br>
+	<div id="map" style="display: none;"></div>
+		<div>
+			<p id="ErrorStatment" style="color: red" align="left"></p>
+		</div>
+	<form onsubmit="makeJSON(this)" class="form-horizontal Qform">
+		<div class="form-group">
+			<label for="name">Name: </label>
+			<input type="text" class="form-control Qform" name="name" id="name">
+		</div>
+		<div class="form-group">
+			<label for="phone">Phone: </label>
+			<input type="text" class="form-control Qform" name="phone" id="phone" required="required">
+		</div>
+		<div class="form-group">
+			<label for="service">Service: </label>
+			<select name="service" id="service" class="form-control Qform">
+				<option value="withdrawal">Withdrawal</option>
+				<option value="deposit">Deposit</option>
+				<option value="transfer">Transfer</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<label for="branch">Branch: </label>
+			<select name="branch" id="nearestBranchName" class="form-control Qform">
+			</select>
+		</div>
+		<br>
+		<div class="form-group">
+			<input class="form-control btn btn-danger" type="submit" name="Submit">
+		</div>
+	</form>
+	</div>
+</div>
+	
+</body>
+<hr>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
+<script src="mapView.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCO9WLr4P5J5CfvUr4Z4FgclNAp-jxT5KA&callback=initMap"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed --> 
+<script src="js/bootstrap.js"></script>
+<script>
+		function findResult(){
+			var result = window.location.search;
+			result = decodeURIComponent(result);
+			result = result.split("=");
+			result = result[1];
+			console.log(result);
+			if(result == "fail"){
+				document.getElementById("ErrorStatment").innerHTML = "This phone has been used, please check!";
+			}
+		}
+		// var myData = [
+		// {
+		// 	"name": "Bill",
+		// 	"age": 20
+		// },
+		// {
+		// 	"name": "Lisa",
+		// 	"age": 40
+		// },
+		// {
+		// 	"name": "Ant",
+		// 	"age": 80
+		// }
+		// ]
+		
+
+
+
+function makeJSON(form){
+	var objects = []; 
+	console.log(form);
+	if (typeof form == 'object' && form.nodeName.toLowerCase() == "form") {  
+		var fields = form.getElementsByClassName("Qform");  
+
+		for(var i=0;i<fields.length;i++){  
+			objects[objects.length] = { name: fields[i].getAttribute("name"), value: fields[i].value };  
+		}  
+	}  
+	console.log(objects);
+	var jsonData = JSON.stringify(objects);  
+	console.log(jsonData);
+// return objects;  
+var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+xmlhttp.onreadystatechange = function() {
+	console.log("in ready")
+	if (this.readyState == 4 && this.status == 200) {
+		// alert(this.responseText);
+		document.getElementById("result").innerHTML = this.responseText;
+	}
+	if (this.responseText == "1062"){
+		console.log("in 1062")
+		window.location = "http://localhost:3000/queue.html?result=fail"
+		//loadURL("http://localhost:3000/joinqueue.html?result=fail");
+
+	} else {
+		window.location = "http://localhost:3000/queueresult.html?result=" + this.responseText;
+		//loadURL("http://localhost:3000/queueresult.html?result=" + this.responseText);
+	}
+};
+xmlhttp.open("POST", "http://localhost:3000/queue.html");
+xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+console.log(objects);
+xmlhttp.send(JSON.stringify(objects));
+
+}
+
+// 		function sendJSON(){
+
+// var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
+// xmlhttp.onreadystatechange = function() {
+// 	if (this.readyState == 4 && this.status == 200) {
+// 		document.getElementById("result").innerHTML =
+// 		this.responseText;
+// 	}
+// };
+// xmlhttp.open("POST", "http://localhost:3000/joinqueue.html");
+// xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+// xmlhttp.send(JSON.stringify(myData));
+
+// }
+
+</script>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bank of China</title>
+    <script src="mapView.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+		margin: 0 20px 10px 20px;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/style.css">
+
+  </head>
+  <body>
+<nav class="navbar navbar-default menu-border">
+  <div class="container"> 
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myDefaultNavbar1" aria-expanded="false"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a class="navbar-brand" href="index.html"><img src="images/BOC_Logo.png" style="display: inline-block; height: 28px;"></a> </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="myDefaultNavbar1">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">HOME </a></li>
+        <li><a href="chatbot.html">CHATBOT</a></li>
+		<li><a href="queue.html">QUEUE FOR SERVICES</a></li>
+		<li><a href="checkcurrent.html">VIEW MY TICKET</a></li>
+		<li><a href="queuenow.html">VIEW QUEUE</a></li>
+		<li class="active"><a href="mapView.html">FIND NEAREST BRANCH<span class="sr-only">(current)</span></a></li>
+	 	<li><a href="about.html">ABOUT US</a></li>
+	  </ul>	
+
+	</div>
+    <!-- /.navbar-collapse --> 
+  </div>
+  <!-- /.container-fluid --> 
+</nav>
+	
+	<h1 align="center" style="font-size:25px;">Find the nearest branch</h1><br>
+	<label class="" style="margin-left: 20px;">On Map:</label>
+	<div id="map"></div>
+
+    <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCO9WLr4P5J5CfvUr4Z4FgclNAp-jxT5KA&callback=initMap">
+    </script>
+	<script src="js/jquery-1.11.3.min.js"></script> 
+	<script src="js/bootstrap.js"></script>
+  </body>
+</html>
